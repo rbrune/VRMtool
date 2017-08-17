@@ -69,7 +69,8 @@ class exeio():
 
     def write_reg(self, t_reg, t_data, t_adapter):
         # actual address is register * 4
-        ret = self.iomap.Write_VGA_Reg_Value(t_reg * 4, t_data, ctypes.byref(self.tempMem), t_adapter)
+        print('write register [0x%X] <= 0x%X' % (t_reg, t_data))
+        ret = self.iomap.Write_VGA_Reg_Value(t_reg * 4, t_data & 0xffffffff, ctypes.byref(self.tempMem), t_adapter)
         print('write register [0x%08X] <= 0x%08X -> 0x%08X' % (t_reg, t_data, ret))
         return ret
 

@@ -69,6 +69,7 @@ class FidgetRegister():
         t_struct = self.data.bits
         for field in t_struct._fields_:
             print(field[0], self.entries[field[0]].get())
+            setattr(t_struct, field[0], int(self.entries[field[0]].get()))
         self.gpuinst.write_reg(getattr(self.reg_type, self.reg), self.data.binary_data)
         self.get_reg()
 
@@ -112,7 +113,7 @@ class polaris10():
             self.write_smc_ind_reg(gmc.mmMC_ARB_GECC2_STATUS, self.test.binary_data)
 
     def add_registers(self, root):
-        gmc_registers = ['mmMC_SEQ_RAS_TIMING', 'mmMC_SEQ_CAS_TIMING']
+        gmc_registers = ['mmMC_SEQ_RAS_TIMING', 'mmMC_SEQ_CAS_TIMING', 'mmMC_SEQ_MISC_TIMING', 'mmMC_SEQ_MISC_TIMING2', 'mmMC_ARB_DRAM_TIMING', 'mmMC_ARB_DRAM_TIMING2']
         for reg in gmc_registers:
             FidgetRegister(self, root, gmc, reg)
         #FidgetRegister(self, root, gfx, 'mmSQC_EDC_CNT')
@@ -124,7 +125,7 @@ class polaris10():
         return ret
 
     def write_reg(self, t_reg, t_data):
-        ret = self.exeio.write_reg(t_data, t_reg, self.adapterid)
+        ret = self.exeio.write_reg(t_reg, t_data, self.adapterid)
         return ret
 
 
