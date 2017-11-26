@@ -9,6 +9,10 @@ import tkinter as tk
 import exeio
 import polaris10
 
+
+# fix bad font rendering on screens with high dpi scaling activated
+ctypes.windll.shcore.SetProcessDpiAwareness(1)
+
 iomap = exeio.exeio()
 
 gpus = []

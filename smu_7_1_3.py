@@ -45,6 +45,20 @@ ixCG_FDO_CTRL2 = 0xc030006c
 
 
 
+class ixCG_THERMAL_STATUS_PackBits(ctypes.LittleEndianStructure):
+    _fields_ = [
+        ("SPARE", ctypes.c_uint32, 8),
+        ("FDO_PWM_DUTY", ctypes.c_uint32, 8),
+        ("THERM_ALERT", ctypes.c_uint32, 1),
+        ("GEN_STATUS", ctypes.c_uint32, 4)
+    ]
+class ixCG_THERMAL_STATUS_Pack(ctypes.Union):
+    _fields_ = [("bits", ixCG_THERMAL_STATUS_PackBits),
+                ("binary_data", ctypes.c_uint32)]
+
+
+
+
 
 class ixCG_FDO_CTRL0_PackBits(ctypes.LittleEndianStructure):
     _fields_ = [

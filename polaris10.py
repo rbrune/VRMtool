@@ -19,7 +19,12 @@ PPSMC_StartFanControl = 0x5b
 PPSMC_StopFanControl = 0x5c
 
 
-class FidgetRegister():
+class FidgetBase():
+    def __init__(self, gpuinst, root, reg_type, reg):
+        pass
+
+
+class FidgetRegister(FidgetBase):
     def __init__(self, gpuinst, root, reg_type, reg):
         self.gpuinst = gpuinst
         self.root = root
@@ -59,7 +64,7 @@ class FidgetRegister():
 
     def get_reg(self):
         print('get', self.reg)
-        self.data.binary_data = self.gpuinst.read_reg(getattr(self.reg_type, self.reg))
+        self.data.binary_data = self.get_reg_hw()
         t_struct = self.data.bits
         for field in t_struct._fields_:
             self.entries[field[0]].set(getattr(t_struct, field[0]))
@@ -70,8 +75,29 @@ class FidgetRegister():
         for field in t_struct._fields_:
             print(field[0], self.entries[field[0]].get())
             setattr(t_struct, field[0], int(self.entries[field[0]].get()))
-        self.gpuinst.write_reg(getattr(self.reg_type, self.reg), self.data.binary_data)
+        self.set_reg_hw(self.data.binary_data)
         self.get_reg()
+
+
+    def get_reg_hw(self):
+        return self.gpuinst.read_reg(getattr(self.reg_type, self.reg))
+
+    def set_reg_hw(self, binary_data):
+        self.gpuinst.write_reg(getattr(self.reg_type, self.reg), binary_data)
+
+
+class FidgetIndirectSMCRegister(FidgetRegister):
+    def __init__(self, gpuinst, root, reg_type, reg):
+        super().__init__(gpuinst, root, reg_type, reg)
+
+
+    def get_reg_hw(self):
+        return self.gpuinst.read_smc_ind_reg(getattr(self.reg_type, self.reg))
+
+    def set_reg_hw(self, binary_data):
+        self.gpuinst.write_smc_ind_reg(getattr(self.reg_type, self.reg), binary_data)
+
+
 
 
 class polaris10():
@@ -116,6 +142,11 @@ class polaris10():
         gmc_registers = ['mmMC_SEQ_RAS_TIMING', 'mmMC_SEQ_CAS_TIMING', 'mmMC_SEQ_MISC_TIMING', 'mmMC_SEQ_MISC_TIMING2', 'mmMC_ARB_DRAM_TIMING', 'mmMC_ARB_DRAM_TIMING2']
         for reg in gmc_registers:
             FidgetRegister(self, root, gmc, reg)
+
+        smu_registers = ['ixCG_THERMAL_STATUS', 'ixCG_FDO_CTRL0', 'ixCG_FDO_CTRL1', 'ixCG_FDO_CTRL2']
+        for reg in smu_registers:
+            FidgetIndirectSMCRegister(self, root, smu, reg)
+
         #FidgetRegister(self, root, gfx, 'mmSQC_EDC_CNT')
 
 
