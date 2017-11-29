@@ -55,7 +55,7 @@ class FidgetRegister(FidgetBase):
             lab2.pack(side=tk.LEFT, padx=(5,0))
 
             et = tk.StringVar()
-            entry = tk.Entry(self.row, textvariable = et, justify=tk.CENTER, width=5)
+            entry = tk.Entry(self.row, textvariable = et, justify=tk.CENTER, width=7)
             et.set(0)
             entry.pack(side=tk.LEFT)
             self.entries[field[0]] = et
@@ -143,7 +143,7 @@ class polaris10():
         for reg in gmc_registers:
             FidgetRegister(self, root, gmc, reg)
 
-        smu_registers = ['ixCG_THERMAL_STATUS', 'ixCG_FDO_CTRL0', 'ixCG_FDO_CTRL1', 'ixCG_FDO_CTRL2']
+        smu_registers = ['ixCG_THERMAL_STATUS', 'ixCG_TACH_STATUS', 'ixCG_FDO_CTRL0', 'ixCG_FDO_CTRL1', 'ixCG_FDO_CTRL2']
         for reg in smu_registers:
             FidgetIndirectSMCRegister(self, root, smu, reg)
 

@@ -59,6 +59,17 @@ class ixCG_THERMAL_STATUS_Pack(ctypes.Union):
 
 
 
+class ixCG_TACH_STATUS_PackBits(ctypes.LittleEndianStructure):
+    _fields_ = [
+        ("TACH_PERIOD", ctypes.c_uint32, 32)
+    ]
+class ixCG_TACH_STATUS_Pack(ctypes.Union):
+    _fields_ = [("bits", ixCG_TACH_STATUS_PackBits),
+                ("binary_data", ctypes.c_uint32)]
+
+
+
+
 
 class ixCG_FDO_CTRL0_PackBits(ctypes.LittleEndianStructure):
     _fields_ = [
