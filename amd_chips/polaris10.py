@@ -46,7 +46,7 @@ class FidgetRegister(FidgetBase):
         self.row = tk.Frame(self.root)
         self.row.pack(side=tk.TOP, anchor=tk.W)
 
-        self.lab = tk.Label(self.row, text=self.reg, width=22)
+        self.lab = tk.Label(self.row, text=self.reg, width=24)
         self.lab.pack(side=tk.LEFT)
 
         self.bt_get = tk.Button(self.row, text="Get", command=self.get_reg)
