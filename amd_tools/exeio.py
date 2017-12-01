@@ -56,9 +56,6 @@ class exeio():
 
 
 
-        #ret = self.iomap.Read_VGA_Reg_Value(0x2A00, ctypes.byref(tempMem), 0)
-        #print('%08X' % ret)
-        #print(repr(tempMem.raw))
 
     # read/write GPU register
     def read_reg(self, t_reg, t_adapter):
@@ -73,11 +70,3 @@ class exeio():
         ret = self.iomap.Write_VGA_Reg_Value(t_reg * 4, t_data, ctypes.byref(self.tempMem), t_adapter)
         print('write register [0x%08X] <= 0x%08X -> 0x%08X' % (t_reg, t_data, ret))
         return ret
-
-
-
-
-
-#def print_pack(t_struct):
-#    for field in t_struct._fields_:
-#        print(field[0], getattr(t_struct, field[0]))
